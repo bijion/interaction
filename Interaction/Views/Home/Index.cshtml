@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "首页";
+}
+
+<div class="jumbotron" style="margin-top:30px;">
+    <h1>必应互动</h1>
+    <p class="lead">
+        必应互动致力于为搜索引擎引入更多互动性的元素，以帮助用户通过搜索表达自己的观点并发现可能的朋友。
+    </p>
+    <p><a href="/Home/List" class="btn btn-default btn-lg">互动元素 &raquo;</a></p>
+</div>
+
+<div class="row">
+    @{
+        Html.RenderPartial("_Vote");
+        Html.RenderPartial("_BingKnows");
+        Html.RenderPartial("_BingAndroidApp");
+        if (ViewBag.Verification == true)
+        {
+            Html.RenderPartial("_BingLottery");
+        }
+        //Html.RenderPartial("_BingLottery");
+    }
+</div>

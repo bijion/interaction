@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta baidu-gxt-verify-token="f86fb59bd7e478f761d443a0d75447f1">
+    <title>@ViewBag.Title - 必应互动</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/comlib")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F2b3aa853d8627a2fc22fd57cbb0ef31a' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=3117466349" type="text/javascript" charset="utf-8"></script>
+</head>
+<body style="padding:0;margin:0;">
+    <div class="container body-content" style="padding:0; max-width:640px;">
+        @RenderBody()
+        <footer style="width:100%;">
+            <p style="text-align:center;">&copy; @DateTime.Now.Year - Microsoft</p>
+        </footer>
+    </div>
+</body>
+</html>

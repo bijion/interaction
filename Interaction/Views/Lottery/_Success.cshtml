@@ -1,0 +1,121 @@
+﻿
+<script type="text/javascript">
+
+     $(document).ready(function () {
+         $('#inputArea').delegate('#submit', 'click', function () {
+             var div = $('#inputArea');
+             $.ajax({
+                 type: 'POST',
+                 url: '/Lottery/InsertPhoneNumber',
+                 dataTye: 'json',
+                 data: JSON.stringify({
+                     RowKey: div.find('#RowKey').val(),
+                     PartitionKey: div.find('#PartitionKey').val(),
+                     Timestamp: div.find('#Timestamp').val(),
+                     PhoneNumber: div.find('#numberInput').val(),
+                     AwardName: $('#awardName').val(),
+                 }),
+                 contentType: 'application/json; charset=utf-8',
+                 success: function (data, textStatus) {
+                     if (data.encode == "1") {
+                         div.remove();
+                         $('#Tips').html(data.Tips);
+                         $('#Tips').attr("style", "padding-top:19px; padding-left:20px; padding-right:20px; padding-bottom:14px");
+                     }
+                     else if (data.encode == "2" || data.encode == "3" || data.encode == "5") {
+                         $('#Tips').html(data.Tips);
+                     }
+                     else if (data.encode == "4") {
+                         div.remove();
+                         $('#Tips').html(data.Tips);
+                         $('#Tips').attr("style", "padding-top:28px; padding-left:10px; padding-right:20px; padding-bottom:23px");
+                     }
+                 },
+                 error: function (XMLHttpRequest, textStatus, errorThrow) {
+                     alert(errorThrow);
+                 }
+             });
+         });
+     });
+</script>
+
+<div class="container lottery_length background_color" style="font-family: 'Microsoft YaHei',arial,tahoma,\5b8b\4f53,sans-serif;">
+    <div class="lottery_firstrow">
+        <table>
+            <tr>
+                <td>
+                    <div class="lottery_title">海淘妈咪来挖宝——挖宝结果</div>
+                </td>
+                <td style="padding-top:19px">
+                    <a href="@ViewBag.DetailUrl" style="text-decoration: underline" target="_blank" class="lottery_link">
+                        查看详情
+                    </a>
+                </td>
+            </tr>
+        </table>              
+    </div>
+    <div class="lottery_word">
+        恭喜您幸运的挖到宝贝，将免费获得必应搜索送出的@{@ViewBag.Award.AwardName}。      
+    </div>
+    <div id="inputArea">
+        <div style="padding-left:20px; padding-top:10px">
+                <input type="text" id="numberInput" style="width:60%; height:30px" placeholder="请留下手机号" />
+                <input type="submit" id="submit" value="提交" style="width:26%; height:31px; margin-left:7px; background-color:#fff;border-color: #ccc; padding-top:5px;padding-bottom:5px;font-size:1em;" class="cbtn" />
+        </div>
+        <input type="hidden" id="awardName" value="@ViewBag.Award.AwardName" />
+        <input type="hidden" id="RowKey" value="@ViewBag.PhoneNumber.RowKey" />
+        <input type="hidden" id="PartitionKey" value="@ViewBag.PhoneNumber.PartitionKey" />
+        <input type="hidden" id="Timestamp" value="@ViewBag.PhoneNumber.Timestamp" />
+    </div>
+    <p id="Tips" style="padding-top:10px; padding-left:20px" class="lottery_word">
+        请谨慎核实，提交后不可修改
+    </p>
+    <table>
+        <tr>
+            <td colspan="1" style="padding-left:15px">
+                <!-- JiaThis Button BEGIN -->
+                <div class="jiathis_style">
+                    <span class="jiathis_txt" style="font-size:13px;color:#333333;font-family:Microsoft YaHei;padding-bottom:22px; padding-left:6px">分享到：</span>
+                    <a class="jiathis_button_qzone"></a>
+                    <a class="jiathis_button_renren"></a>
+                    <a class="jiathis_button_douban"></a>
+                    <a class="jiathis_button_tsina"></a>
+                    <a class="jiathis_button_tqq"></a>
+                </div>
+                <!-- Hidden area for data used in share -->
+                <input type="hidden" id="AwardId" value="@ViewBag.AwardId" />
+                <input type="hidden" id="shareMessage" value="@ViewBag.ShareMessage" />
+                <input type="hidden" id="firstTriggerQuery" value="@ViewBag.FirstTriggerQuery" />
+                <script type="text/javascript">
+
+                    var awardId = document.getElementById("AwardId").value;
+                    var firstTriggerQuery = document.getElementById("firstTriggerQuery").value;
+                    var topicTitle = "海淘妈咪来挖宝";
+                    var shareMessage = document.getElementById("shareMessage").value;
+                    var shareUrl = "http://www.bing.com";
+                    if (firstTriggerQuery != null || firstTriggerQuery != "") {
+                        shareUrl = "http://www.bing.com/search?setmkt=zh-cn&q=" + firstTriggerQuery;
+                    }
+                    var jiathis_config = {
+                        data_track_clickback: true,
+                        url: shareUrl,
+                        summary: shareMessage,
+                        title: topicTitle,
+                        // TODO: use our logo or topic specific image
+                        pic: "http://interaction.chinacloudsites.cn/images/Lottery/LotteryLogo.png",
+                        // TODO: use our own weibo appkey and ralateuid
+                        appkey: {
+                            "tsina": "2505197526"
+                        },
+                        ralateuid: {
+                            "tsina": "2997618404"
+                        }
+                    }
+                </script>
+                <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1969211" charset="utf-8"></script>
+                <!-- JiaThis Button END -->
+            </td>
+        </tr>
+    </table>
+</div>
+

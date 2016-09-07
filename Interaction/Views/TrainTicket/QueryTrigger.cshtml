@@ -1,0 +1,43 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <style type="text/css">
+        .ticket_calendar_rightrail_subtitle {
+            font-weight: bold; font-size: 16px; color: #525051;
+        }
+        .ticket_calendar_rightrail_body {
+            font-size: 13px;
+        }
+        .li {
+            padding: 3px;
+        }
+        .ticket_calendar_rightrail_separator {
+            height: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <table class="ticket_calendar_rightrail_body">
+            <tr>
+                <td class="ticket_calendar_rightrail_subtitle">@ViewBag.Today  可购火车票</td>
+            </tr>
+            <tr class="ticket_calendar_rightrail_separator">
+            </tr>
+            <tr>
+                <td class="li">● 网络和电话购票—至@{@ViewBag.FirstLine}</td>
+            </tr>
+            <tr>
+                <td class="li">● 代售点车站购票—至@{@ViewBag.SecondLine}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

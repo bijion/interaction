@@ -1,0 +1,118 @@
+﻿
+<link href="../Content/bootstrap.css" rel="stylesheet">
+<style type="text/css">
+    .background_color {
+        background-color:#FFCC00;
+    }
+
+    .lottery_length {
+        width: 100%;
+        padding-left:0;
+        padding-right:0;
+        margin:0;
+    }
+
+    .lottery_title {
+        font-family: 'Microsoft YaHei';
+        font-size: 18px;
+        font-weight:bold;
+        padding-top:13px;
+        padding-left:20px;
+        padding-right:20px;
+    }
+
+    .lottery_word {
+        font-family: 'Microsoft YaHei';
+        font-size: 13px;
+        color:#333333;
+        padding-left:20px;
+        padding-right:20px;
+    }
+
+    .lottery_link {
+        font-size:13px;
+        color:#0000CC;
+        padding-top:13px;
+    }
+
+    .lottery_firstrow {
+        padding-bottom: 5px;
+    }
+    .cbtn {
+        color: #0072c5;       
+    }
+</style>
+
+@if (!ViewBag.JustVoteBlock)
+{
+    <h2>抽奖测试</h2>
+    <div>
+        <form class="form-horizontal" role="form" action="QueryTrigger" method="get">
+            <div class="form-group">
+                <label for="query" class="col-sm-2 control-label">奖品名称 : </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="key" name="key"
+                           placeholder="请输入待测试的奖品名称">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+        }
+
+    @if (ViewBag.Result.Equals("lose"))
+    {
+        Html.RenderPartial("_Lose");
+    }
+    else if (ViewBag.Result.Equals("success"))
+    {
+        Html.RenderPartial("_Success");
+    }
+
+@if (!ViewBag.JustVoteBlock)
+{
+    <br />
+    if (ViewBag.Root.Equals("space"))
+    {
+        <div class="alert alert-danger" role="alert">
+            请输入奖品名称！
+        </div>
+    }
+    else if (ViewBag.Root.Equals("notFind"))
+    {
+        <div class="alert alert-danger" role="alert">
+            找不到该奖品！请重新输入。
+        </div>
+    }
+    else if (ViewBag.Root.Equals("notBegin"))
+    {
+        <div class="alert alert-danger" role="alert">
+            该奖品还未生效。
+        </div>
+    }
+    else if (ViewBag.Root.Equals("hasEnd"))
+    {
+        <div class="alert alert-danger" role="alert">
+            该奖品已经过期。
+        </div>
+    }
+    else if (ViewBag.Root.Equals("reachQuato"))
+    {
+        <div class="alert alert-danger" role="alert">
+            该奖品发放已达每日上限。
+        </div>
+    }
+    else if (ViewBag.Root.Equals("success"))
+    {
+    }
+    else if (ViewBag.Root.Equals("failed"))
+    {
+        <div class="alert alert-danger" role="alert">
+            没有抽中奖。
+        </div>
+    }
+}

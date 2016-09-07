@@ -1,0 +1,70 @@
+﻿<div class="container lottery_length background_color" style="font-family: 'Microsoft YaHei',arial,tahoma,\5b8b\4f53,sans-serif;">
+    <div class="lottery_firstrow">
+        <table>
+            <tr>
+                <td>
+                    <div class="lottery_title">海淘妈咪来挖宝——挖宝结果</div>
+                </td>
+                <td style="padding-top:19px">
+                    <a href="@ViewBag.DetailUrl" target="_blank" style="text-decoration: underline" class="lottery_link">
+                        查看详情
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="padding-top:5px;padding-bottom:0px;padding-left:20px;padding-right:20px">
+        遗憾本次没有挖到宝贝，欢迎继续挖其他宝贝。<a href="@ViewBag.DetailUrl" target="_blank" style="text-decoration:underline;font-size:13px;color:#0000CC;">再试一次</a>
+    </div>
+
+    <div style="padding-top:15px;padding-bottom:15px;padding-left:20px;padding-right:20px">
+        感谢您使用必应搜索海外母婴产品，必应致力于为您提供全方位的海淘产品中英文翻译，让您无需英文基础，轻松海淘。
+    </div>
+
+    <table>
+        <tr>
+            <td colspan="1" style="padding-left:15px">
+                <!-- JiaThis Button BEGIN -->
+                <div class="jiathis_style">
+                    <span class="jiathis_txt" style="font-size:13px;color:#333333;font-family:Microsoft YaHei;padding-bottom:22px; padding-left:6px">分享到：</span>
+                    <a class="jiathis_button_qzone"></a>
+                    <a class="jiathis_button_renren"></a>
+                    <a class="jiathis_button_douban"></a>
+                    <a class="jiathis_button_tsina"></a>
+                    <a class="jiathis_button_tqq"></a>
+                </div>
+                <!-- Hidden area for data used in share -->
+                <input type="hidden" id="shareMessage" value="@ViewBag.ShareMessage" />
+                <input type="hidden" id="firstTriggerQuery" value="@ViewBag.FirstTriggerQuery" />
+                <script type="text/javascript">
+
+                    var firstTriggerQuery = document.getElementById("firstTriggerQuery").value;
+                    var topicTitle = "海淘妈咪来挖宝";
+                    var shareMessage = document.getElementById("shareMessage").value;
+                    var shareUrl = "http://www.bing.com";
+                    if (firstTriggerQuery != null || firstTriggerQuery != "") {
+                        shareUrl = "http://www.bing.com/search?setmkt=zh-cn&q=" + firstTriggerQuery;
+                    }
+                    var jiathis_config = {
+                        data_track_clickback: true,
+                        url: shareUrl,
+                        summary: shareMessage,
+                        title: topicTitle,
+                        // TODO: use our logo or topic specific image
+                        pic: "http://interaction.chinacloudsites.cn/images/Lottery/LotteryLogo.png",
+                        // TODO: use our own weibo appkey and ralateuid
+                        appkey: {
+                            "tsina": "2505197526"
+                        },
+                        ralateuid: {
+                            "tsina": "2997618404"
+                        }
+                    }
+                </script>
+                <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1969211" charset="utf-8"></script>
+                <!-- JiaThis Button END -->
+            </td>
+        </tr>
+    </table>
+</div>

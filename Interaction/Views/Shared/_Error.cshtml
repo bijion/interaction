@@ -1,0 +1,4 @@
+﻿<hgroup>
+    <h1>Error.</h1>
+    <h2>An error occurred while processing your request.</h2>
+</hgroup>

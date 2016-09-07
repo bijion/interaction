@@ -1,0 +1,49 @@
+﻿﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="../Content/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+        .lottery_length {
+            width: 415px;
+        }
+
+        .lottery_title {
+            font-family: 'Microsoft YaHei';
+            font-size: 24px;
+        }
+
+        .lottery_content {
+        }
+
+        .lottery_link {
+            padding-top: 12px;
+        }
+
+        .lottery_border {
+            border: 0.2em;
+            border-style: solid;
+            padding: 5px;
+        }
+
+        .lottery_firstrow {
+            padding-bottom: 5px;
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+    <div>
+        @{
+            Html.RenderPartial("_Lose");
+            <!--<br/>
+            Html.RenderPartial("_Success");-->
+        }
+    </div>
+</body>
+</html>

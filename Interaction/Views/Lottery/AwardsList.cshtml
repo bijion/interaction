@@ -1,0 +1,205 @@
+﻿﻿
+@{
+    ViewBag.Title = "奖品列表";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#AwardsBody').delegate('#btnButton', 'click', function () {
+            var tr = $(this).closest('tr');
+            $.ajax({
+                type: 'POST',
+                url: '/Lottery/Delete',
+                dataTye: 'json',
+                data: JSON.stringify({
+                    RowKey: tr.find('#awardKey').html(),
+                }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data, textStatus) {
+                    tr.remove();
+                    alert("奖品成功删除！");
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrow) {
+                    alert(errorThrow);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('#AwardsBody').delegate('#updateButton', 'click', function () {
+            var tr = $(this).closest('tr');
+
+            var RowKey = tr.find('#awardKey').html();
+            var AwardName = tr.find('#awardName').text().trim();
+            var Url = tr.find('#awardUrl').val();
+            var AwardRate = tr.find('#awardRate').html().trim();
+            var AwardQuota = tr.find('#awardQuota').html().trim();
+            var StartDate = tr.find('#awardStartDate').html().trim();
+            var EndDate = tr.find('#awardEndDate').html().trim();
+            var TriggerQueries = tr.find('#awardTriggerQueries').val();
+
+            var url = '/Lottery/Create?RowKey=' + RowKey + '&AwardName=' + AwardName + '&Url=' + Url + '&AwardRate=' + AwardRate + '&AwardQuota=' + AwardQuota + '&StartDate=' + StartDate + '&EndDate=' + EndDate + '&TriggerQueries=' + TriggerQueries;
+            location.href = url;
+            return false;
+        });
+    });
+
+    $(document).ready(function () {
+        $("input[id='btnButton']").click(function () {
+            return confirm('确定删除这件奖品？');
+        });
+    });
+</script>
+
+<h2>@ViewBag.Title</h2>
+<h4>
+    <span class='label label-default'>灰色：已过期的奖品</span>
+    <span class='label label-success'>绿色：已生效的奖品</span>
+    <span class='label label-primary'>蓝色：将要生效的奖品</span>
+</h4>
+
+@if (ViewBag.HasResult)
+{
+    <div id="content">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "awardForm" }))
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>RowKey</th>
+                        <th>奖品名称</th>
+                        <th>中奖率</th>
+                        <th>每日额度</th>
+                        <th>当前发放量</th>
+                        <th>起始时间</th>
+                        <th>结束时间</th>
+                        <th>添加时间</th>
+                        <th>PV总数</th>
+                        <th>实际获奖率</th>
+                        <th>删除</th>
+                        <th>更新</th>
+                    </tr>
+                </thead>
+                <tbody id="AwardsBody">
+                    @foreach (var award in @ViewBag.AwardsList)
+                    {
+                        <tr>
+                            <td id="awardKey" style="width:10%">@award.RowKey</td>
+                            <td id="awardName" style="width:15%">
+                                <h4 style="margin-top:0px;margin-bottom:0px">
+                                    @{
+                        DateTime now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"));
+                        if (award.StartDate.ToShortDateString().Equals(now.ToShortDateString()) || award.EndDate.ToShortDateString().Equals(now.ToShortDateString()))
+                        {
+                            <span class='label label-success'>@award.AwardName</span>
+                        }
+                        else if (award.StartDate > now)
+                        {
+                            <span class='label label-primary'>@award.AwardName</span>
+                        }
+                        else if (award.EndDate < now)
+                        {
+                            <span class='label label-default'>@award.AwardName</span>
+                        }
+                        else
+                        {
+                            <span class='label label-success'>@award.AwardName</span>
+                        }
+                                    }
+                                </h4>
+                            </td>
+                            <td id="awardRate" style="width:7%">
+                                @{
+                                    @award.AwardRate
+                                }
+                            </td>
+                            <td id="awardQuota" style="width:8%">
+                                @{
+                                    @award.AwardQuota
+                                }
+                            </td>
+                            <td style="width:9%">
+                                @{
+                                    @award.TotalVolume
+                                }
+                            </td>
+                            <td id="awardStartDate" style="width:7%">
+                                @{
+                                    @award.StartDate.ToShortDateString()
+                                }
+                            </td>
+                            <td id="awardEndDate" style="width:7%">
+                                @{
+                                    @award.EndDate.ToShortDateString()
+                                }
+                            </td>
+                            <td style="width:10%">
+                                @{
+                                    @award.Timestamp.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss");
+                                }
+                            </td>
+                            <td style="width:7%">
+                                @{
+                                    @award.PVCount;
+                                }
+                            </td>
+                            @{
+                                              string rate;
+                                              if (award.PVCount == 0)
+                                              {
+                                                  rate = string.Format("{0:f2}%", 0.0f);
+                                              }
+                                              else
+                                              {
+                                                  rate = string.Format("{0:f2}%", (float)award.TotalVolume / award.PVCount * 100);
+                                              }
+                            }
+                            <td style="width:9%">
+                                @rate
+                            </td>
+                            <td style="width:5%">
+                                <input id="btnButton" type="image" style="
+    width: 22px;
+    padding-top: 0px;
+    margin-top: 0px;
+    padding-left: 0px;
+    border-left-width: 0px;
+    border-bottom-width: 0px;
+    padding-right: 0px;
+    border-right-width: 0px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    border-top-width: 0px;
+" value="delete" src="~/images/Lottery/cancle.png" />
+                            </td>
+                            <td style="width:5%">
+                                <button id="updateButton">U</button>
+                            </td>
+                            <td>
+                                <input id="awardUrl" type="hidden" value="@award.Url" />
+                                <input id="awardTriggerQueries" type="hidden" value="@award.TriggerQueries" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+}
+else
+{
+    <div>
+        <div class="alert alert-danger" role="alert">
+            没有找到任何<strong>奖品</strong>！
+        </div>
+    </div>
+}
+
+<div>
+    <p>
+        <a class="btn btn-default" href="/Lottery/Create">添加 &raquo;</a>
+        <a class="btn btn-default" href="/Lottery/QueryTrigger">测试 &raquo;</a>
+    </p>
+</div>

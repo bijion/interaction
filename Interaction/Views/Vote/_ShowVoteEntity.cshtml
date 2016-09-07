@@ -1,0 +1,201 @@
+﻿<!--
+    Please make sure the vote entity are set to ViewBag.VoteEntity before you call this partial view.
+-->
+<div id="voteanswer" class="votecontent" style="font-family:'Microsoft YaHei';overflow:auto;">
+    <div>
+        @{ 
+            string textfont = @ViewBag.Market == "ja-jp" ? "Arial,Meiryo,Helvetica,sans-serif" : "Microsoft YaHei";
+            string highlight = @ViewBag.Market == "ja-jp" ? "font-weight:bold;" : "color:#ff0000;";
+                       
+            var SumCount = 0; long MaxCount = 1; 
+        }
+
+        @foreach (var options in ViewBag.VoteTopic.Options)
+        {
+            SumCount += options.Value.VoteCount;
+            MaxCount = MaxCount > options.Value.VoteCount ? MaxCount : options.Value.VoteCount;
+        }
+
+        <div id="topicTitle" style="border-style:hidden;padding:0;font-size:18px;font-family:@textfont;">
+            @if (ViewBag.VoteTopic.TopicEntity.HasDetailPage && (null != ViewBag.ShowTopicTitleLink && ViewBag.ShowTopicTitleLink))
+            {
+                var underlinestyle = (null != ViewBag.ShowTitleUnderline && ViewBag.ShowTitleUnderline) ? "text-decoration:underline;" : "text-decoration:none;";
+
+                <a href="@String.Format("/Vote/Detail?tid={0}&form={1}&mkt={2}", @ViewBag.VoteTopic.TopicId, @ViewBag.Formcode, @ViewBag.VoteTopic.TopicEntity.Market)" style="color:#0000CC;@underlinestyle" target="_blank" onclick="window.open(this.href); return false;">@ViewBag.VoteTopic.TopicEntity.TopicTitle</a>
+            }
+            else
+            {
+                <a style="color:black;text-decoration:none;">@ViewBag.VoteTopic.TopicEntity.TopicTitle</a>
+            }
+        </div>
+
+        @{ string date = DateTime.Now.GetDateTimeFormats()[5]; }
+
+        <div style="margin-top:0px;padding:0 0 5px 0;font-size:13px;font-family:'SimSun Regular';overflow:auto;">
+            <span style="color:#777777;margin-right:3px;float:left;font-family:@textfont;">@ViewBag.LabelLang["LabelEngagementCount1"]<span id="SumVoteCount" style="@highlight; font-family:Arial;width:95px;text-align:center;">@SumCount</span>@ViewBag.LabelLang["LabelEngagementCount2"]</span>
+            @if (ViewBag.Market != "ja-jp")
+            { 
+                <span style="color:#777777;font-family:Arial;float:left;width:70px;text-align:center;">@date</span>
+            }
+            @*<a href="@String.Format("/Vote/Create?form={0}", @ViewBag.Formcode)" style="color:#0000CC;font-family:Arial;float:right;padding-right:3px;" target="_blank">创建投票</a>*@
+            
+            @if (ViewBag.PageCategory == "detail")
+            {
+                <div style="float:right;"><wb:follow-button uid="5347281308" type="red_1" width="67" height="22"></wb:follow-button></div>
+            }        
+        </div>
+        
+        <!-- Options -->
+        @{
+            string[] colors = ViewBag.Market == "ja-jp" ? new string[] { "#4169E1", "#4169E1", "#4169E1", "#4169E1", "#4169E1" } : new string[] { "#FF4D4D", "#1C54C3", "#A1CC43", "#00A8DC", "#FF9326" };
+
+            if (2 == ViewBag.VoteTopic.Options.Count)
+            {
+                var option1 = @ViewBag.VoteTopic.Options[1];
+                var option2 = @ViewBag.VoteTopic.Options[2];
+                var optioncount1 = (option1.VoteCount == 0) ? 1 : option1.VoteCount;
+                var optioncount2 = (option2.VoteCount == 0) ? 1 : option2.VoteCount;
+                
+                var ratio1 = 1.0 * optioncount1 / (optioncount1 + optioncount2);
+                var ratio2 = 1.0 * optioncount2 / (optioncount1 + optioncount2);
+                var vsimagesrc = ratio1 >= ratio2 ? "/images/vote/vs_red.png" : "/images/vote/vs_blue.png";
+
+                <table style="width:100%;float:left;">
+                    <tr id="pkline" style="margin:0;padding:0;border-style:none;width:100%;">
+                        <td id="optionprogressbar1" style="border-style:none;padding:0;min-width:2%;width:@string.Format("{0}%", ratio1 * 100);">
+                            <div style="padding-bottom:5px;height:25px;">
+                                <span id="optionpercentage1" style="float:left;font-size:16px;color:#FF4D4D;">
+                                @string.Format("{0}%", Math.Round(ratio1, 2) * 100)
+                                </span>
+                            </div>
+                            <div style="background-color:#FF4D4D;height:4px;margin-bottom:10px;"></div>
+                        </td>
+                        <td style="border-style:none;padding:12px 0 0;width:33px;">
+                            <img id="vsimage" src="@vsimagesrc" style="width:33px;height:33px;">
+                        </td>
+                        <td id="optionprogressbar2" style="border-style:none;padding:0;min-width:2%;width:auto">
+                            <div style="padding-bottom:5px;height:25px;">
+                                <span id="optionpercentage2" style="float:right;font-size:16px;color:#1C54C3;">
+                                @string.Format("{0}%", Math.Round(ratio2, 2) * 100)
+                                </span>
+                            </div>
+                            <div style="background-color:#1C54C3;height:4px;margin-bottom:10px;"></div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div style="padding:10px 0;border-style:none;width:100%;float:left;">
+                    <div style="width:45%;float:left;vertical-align:top;">[@ViewBag.LabelLang["SupportRed"]]<span id="optiontext1" style="padding-left:5px;">@option1.OptionText</span></div>
+                    <div style="width:10%;height:1px;float:left;"></div>
+                    <div style="width:45%;float:left;vertical-align:top;">[@ViewBag.LabelLang["SupportBlue"]]<span id="optiontext2" style="padding-left:5px;">@option2.OptionText</span></div>
+                </div>
+                
+                if (ViewBag.ShowVoteButton)
+                {
+                    var btn1class = (ViewBag.VoteOption >= 0) ? "btn-vote-pkmode-disable" : "btn-vote-pkmode-red";
+                    var btn2class = (ViewBag.VoteOption >= 0) ? "btn-vote-pkmode-disable" : "btn-vote-pkmode-blue";
+
+                    <div style="height:40px;padding:0 0 10px 0;width:100%;float:left;">
+                        <div style="width:45%;float:left;">
+                            <button id="pk-votebutton1" class="@btn1class" type="button" onclick="voteshoot('@ViewBag.VoteTopic.TopicId', '1', @ViewBag.VoteTopic.Options.Count);">@ViewBag.LabelLang["SupportRed"]</button>
+                        </div>
+                        <div style="width:10%;height:1px;float:left;"></div>
+                        <div style="width:45%;float:left;">
+                            <button id="pk-votebutton2" class="@btn2class" type="button" onclick="voteshoot('@ViewBag.VoteTopic.TopicId', '2', @ViewBag.VoteTopic.Options.Count);">@ViewBag.LabelLang["SupportBlue"]</button>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <table style="width:100%;padding:0;margin:0;">
+                    @foreach (var option in ViewBag.VoteTopic.Options)
+                    {
+                        var voteButtonId = "votebutton" + @option.Key;
+                        var optionTextId = "optiontext" + @option.Key;
+                        var optionPercentageId = "optionpercentage" + @option.Key;
+                        var optionProgressBarId = "optionprogressbar" + @option.Key;
+                        var width = (20 + (70 * @option.Value.VoteCount) / @MaxCount) + "%";
+                        var barColor = colors[(@option.Key + 4) % 5];
+                        var progressRatio = string.Format("{0}%", Math.Round(1.0 * option.Value.VoteCount / @SumCount, 2) * 100);
+
+                        <tr>
+                            <td style="padding:0;border-style:none;">
+                                <div style="margin-bottom:5px;">
+                                    <span id="@optionTextId" style="color:#333333;font-size:13px;font-family:'SimSun Regular';">@option.Value.OptionText</span>
+                                </div>
+                                <div class="progress-ratio" style="float: right;padding-left: 20px; vertical-align: text-top;line-height:10px;font-size:14px;font-family:Arial;width:55px;padding-left:10px;">
+                                    <span id="@optionPercentageId">@progressRatio</span>
+                                </div>
+                                <div class="progress" style="height:10px;border-radius:0px;box-shadow:none;background-color:#DDDDDD;margin-bottom:15px;">
+                                    <div id="@optionProgressBarId" style="width:@width;background-color:@barColor;" class="progress-bar" role="progressbar"></div>
+                                </div>
+                            </td>
+                            @if (ViewBag.ShowVoteButton)
+                            {
+                                var buttonbkg = (ViewBag.VoteOption == option.Key)
+                                                ? "btn-vote-click"
+                                                : ((ViewBag.VoteOption < 0) ? "btn-vote-default" : "btn-vote-nonclick");
+
+                                <td style="text-align:center;width:55px;padding:15px 0 6px;border-style:none;">
+                                    <button id="@voteButtonId" class="@buttonbkg" type="button" onclick="voteshoot('@ViewBag.VoteTopic.TopicId', @option.Key, @ViewBag.VoteTopic.Options.Count);"></button>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </table>
+            }
+        }
+
+        <!-- Trigger queries -->
+        @if (ViewBag.ShowQuery && Request.IsAuthenticated)
+        {
+            <div style="width:100%;float:left;">
+                <strong>触发查询 : </strong>
+                @foreach (var query in ViewBag.VoteTopic.TriggerQueries)
+                {
+                    <span>@query ; </span>
+                }
+            </div>
+        }
+    </div>
+
+    @if ("bingapp" == ViewBag.Formcode)
+    {
+        <input type="hidden" id="bingappparam" value="@ViewBag.BingAppRedirection" />
+    }
+    @if (@ViewBag.EnableShare != null && @ViewBag.EnableShare)
+    {
+        <div style="width:100%;float:left;">
+            <div style="padding-bottom:10px;height:34px;">
+                <p id="shareGuideTxtBar" style="display:inline-block;">分享：</p>
+                <img id="wechatIconBar" src="~/images/vote/share/MobileWechatShare.png" class="img-circle" style="width:24px; height:24px;cursor:pointer;" onclick="shareToSNS('wechatbar')" alt="分享给微信好友">
+                <img src="~/images/vote/share/MobileSinaWeiboShare.png" class="img-circle" style="width:24px; height:24px;cursor:pointer;" onclick="shareToSNS('sinaweibo')" data-dismiss="modal" alt="分享到新浪微博">
+                <img src="~/images/vote/share/MobileQQZoneShare.png" class="img-circle" style="width:24px; height:24px;cursor:pointer;" onclick="shareToSNS('qqzone')" data-dismiss="modal" alt="分享到QQ空间">               
+            </div>
+            <div id="downloadAppDivBar" style="display: none; position: absolute; left: 0; top: 0; width: 300px; height:auto; background-color: #f6f6f6; border-color: #e7e7e7; border-width: 1px; border-style: solid;">
+                <div>
+                    <button type="button" class="close" onclick="hideDownloadAppDivBar()" aria-hidden="true">
+                        &times;
+                    </button>
+                    <p style="text-align: center; color: #666666; font-family: 'Microsoft YaHei'; font-weight: bold; font-size: larger; line-height: 28px;">推荐安装“手机必应”（微软出品)</p>
+                    <p style="text-align: center; color: #999999; font-family: 'Microsoft YaHei'; font-weight: lighter; line-height: 20px;">仅一次安装，即刻进行微信分享</p>
+                </div>
+                <div style="text-align: center;">
+                    <a class="btn btn-primary" href="http://download.get.live.cn/bing/Android/BingNG_zh-CN_MSSITES.APK" style="margin-bottom: 5px;" target="_blank">下载必应APP</a>
+                </div>
+            </div>
+        </div>
+        
+        Html.RenderPartial("_ShareModal");
+        
+        <!-- Hidden area for data used in share -->
+        <input type="hidden" id="shareUrl" value="@ViewBag.ShareUrl" />
+        <input type="hidden" id="shareImage" value="@ViewBag.ShareImage" />
+        <input type="hidden" id="sinaweibov" value="@ViewBag.SinaweiboV" />
+    }
+    <input type="hidden" id="topicId" value="@ViewBag.TopicId" />
+    <input type="hidden" id="voteoption" value="@ViewBag.VoteOption" />
+    <input type="hidden" id="formcode" value="@ViewBag.Formcode" />
+    <input type="hidden" id="market" value="@ViewBag.Market" />
+</div>

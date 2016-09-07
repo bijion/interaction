@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "投票列表";
+}
+
+<div style="overflow:auto;">
+    <h2 style="float:left;">@ViewBag.Title</h2>
+    <p style="float:right;margin-top:20px;">
+        <a class="btn btn-primary" href="/Vote/Create" target="_blank">创建投票</a>
+        <a class="btn btn-default" href="/Vote/Search" target="_blank">查询投票</a>
+    </p>
+</div>
+
+@if (ViewBag.HasResult)
+{
+    <div id="content">
+        <table class="table">
+            <thead>
+                <tr>
+                @if (Request.IsAuthenticated)
+                {
+                    <th>ID</th>
+                }
+                    <th>投票</th>
+                @if (Request.IsAuthenticated)
+                {
+                    <th>可投活跃度 (%)</th>
+                    <th>整体活跃度 (%)</th>
+                }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var voteTopic in @ViewBag.VoteTopicList)
+                {
+                    <tr>
+                        @if (Request.IsAuthenticated)
+                        {
+                            <td style="width:15%">
+                                <a href="@String.Format("/Vote/Search?tid={0}&mkt={1}", @voteTopic.TopicId, @voteTopic.TopicEntity.Market)" target="_blank">@voteTopic.TopicId</a>
+                                <br/><br/>
+                                <p>@voteTopic.TopicEntity.Market</p>
+                                @if (voteTopic.TopicEntity.Status == "Active")
+                                {
+                                    <p>在线上...</p>
+
+                                    if (Request.IsAuthenticated)
+                                    {
+                                        <br />
+                                        using (Ajax.BeginForm("List", new { act = "offline", tid = @voteTopic.TopicId, cat = voteTopic.TopicCategory },
+                                            new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "content", OnSuccess = "", InsertionMode = InsertionMode.Replace }))
+                                        {
+                                            <button type="submit" class="btn btn-warning">下线</button>
+                                        }
+                                    }
+                                }
+                                else if (voteTopic.TopicEntity.Status == "Deprecated")
+                                {
+                                    <p>已下线...</p>
+
+                                    if (Request.IsAuthenticated)
+                                    {
+                                        <br />
+                                        using (Ajax.BeginForm("List", new { act = "online", tid = @voteTopic.TopicId, cat = voteTopic.TopicCategory },
+                                            new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "content", OnSuccess = "", InsertionMode = InsertionMode.Replace }))
+                                        {
+                                            <button type="submit" class="btn btn-success">上线</button>
+                                        }
+                                    }
+                                }
+                                else if (voteTopic.TopicEntity.Status == "Pending")
+                                {
+                                    <p>新创建...</p>
+
+                                    if (Request.IsAuthenticated)
+                                    {
+                                        <br />
+                                        using (Ajax.BeginForm("List", new { act = "online", tid = @voteTopic.TopicId, cat = voteTopic.TopicCategory },
+                                            new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "content", OnSuccess = "", InsertionMode = InsertionMode.Replace }))
+                                        {
+                                            <button type="submit" class="btn btn-success">上线</button>
+                                        }
+
+                                        <br />
+                                        using (Ajax.BeginForm("List", new { act = "del", tid = @voteTopic.TopicId, cat = voteTopic.TopicCategory },
+                                            new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "content", OnSuccess = "", InsertionMode = InsertionMode.Replace }))
+                                        {
+                                            <button type="submit" class="btn btn-danger">删除</button>
+                                        }
+                                    }
+                                }
+                                <br />
+                                @using (Ajax.BeginForm("Create", new { tid = @voteTopic.TopicId },
+                                    new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "content", OnSuccess = "", InsertionMode = InsertionMode.Replace }))
+                                {
+                                    <button type="submit" class="btn btn-warning">编辑</button>
+                                }
+                            </td>
+                        }
+                        <td style="width:60%">
+                            @{
+                                ViewBag.VoteTopic = voteTopic;
+                                Html.RenderPartial("_ShowVoteEntity");
+                            }
+                        </td>
+                        @if (Request.IsAuthenticated)
+                        {
+                            double votableEngagement =
+                            Math.Round((double)voteTopic.TopicEntity.TotalVoteCount
+                                        / voteTopic.TopicEntity.VotableRequestCount, 3) * 100;
+
+                            double PVEngagement =
+                            Math.Round((double)voteTopic.TopicEntity.TotalVoteCount
+                                        / voteTopic.TopicEntity.PVRequestCount, 3) * 100;
+
+                            <td>
+                                @voteTopic.TopicEntity.TotalVoteCount / @voteTopic.TopicEntity.VotableRequestCount <br />= @votableEngagement %
+                            </td>
+                            <td>
+                                @voteTopic.TopicEntity.TotalVoteCount / @voteTopic.TopicEntity.PVRequestCount <br />= @PVEngagement %
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div>
+        <p class="bg-warning">没有找到任何投票！</p>
+    </div>
+}

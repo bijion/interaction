@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "获奖列表";
+}
+
+@model Interaction.Models.AwardNameDropDownListViewModel
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('[value="@ViewBag.SelectedKey"]').attr('selected', true);
+    });
+</script>
+
+<h2>@ViewBag.Title</h2>
+<form class="form-horizontal" role="form" action="Review" method="post">
+    <h4>
+        <span class='label label-success'>奖品名称</span>
+        @Html.DropDownListFor(m => m.awardRowKey, Model.award)
+        <span class='label label-success'>获奖时间</span>
+        @{
+            if (ViewBag.SelectedDate != null)
+            {
+                DateTime date = @ViewBag.SelectedDate;
+                <input type="date" class="form-control" id="date" name="date" style="display:table-row" placeholder="请输入获奖时间" value="@date.ToString("yyyy-MM-dd")">
+            }
+            else
+            {
+                <input type="date" class="form-control" id="date" name="date" style="display:table-row" placeholder="请输入获奖时间">
+            }
+        }
+        <button type="submit" id="submit" name="submit" class="btn btn-primary">查看</button>
+        <button type="submit" id="submitAll" name="submitAll" class="btn btn-primary">查看全部</button>
+    </h4>
+</form>
+
+@if (ViewBag.HasResult)
+{
+    <div id="content">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>奖品名称</th>
+                    <th>电话号码</th>
+                    <th>中奖时间</th>
+                </tr>
+            </thead>
+            <tbody id="phonenumberBody">
+                @foreach (var phonenumbersPerOneAward in @ViewBag.Phonenumbers)
+                {
+                    foreach (var phonenumber in phonenumbersPerOneAward)
+                    {
+                        <tr>
+                            <td id="AwardName" style="width:20%">
+                                @{
+                                    @phonenumber.AwardName
+                                }
+                            </td>
+                            <td id="PhoneNumber" style="width:20%">
+                                @{
+                                    @phonenumber.PhoneNumber
+                                }
+                            </td>
+                            <td id="InsertTime" style="width:20%">
+                                @{
+                                    @phonenumber.InsertTime
+                                }
+                            </td>
+                        </tr>
+                    }
+                    <tr></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div>
+        <div class="alert alert-danger" role="alert">
+            没有找到任何<strong>手机号码</strong>！
+        </div>
+    </div>
+}

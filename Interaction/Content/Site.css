@@ -1,0 +1,224 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* forms */
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+    fieldset legend {
+        display: none;
+    }
+
+    fieldset ol {
+        padding: 0;
+        list-style: none;
+    }
+
+        fieldset ol li {
+            padding-bottom: 5px;
+        }
+
+label {
+    display: block;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+label.checkbox {
+    display: inline;
+}
+
+input, textarea {
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    color: #333;
+    font-size: 1.2em;
+    margin: 5px 0 6px 0;
+    padding: 5px;
+    width: 300px;
+}
+
+textarea {
+    font-family: inherit;
+    width: 500px;
+}
+
+    input:focus, textarea:focus {
+        border: 1px solid #7ac0da;
+    }
+
+    input[type="checkbox"] {
+        background: transparent;
+        border: inherit;
+        width: auto;
+    }
+
+    input[type="submit"],
+    input[type="button"],
+    button {
+        background-color: #d3dce0;
+        border: 1px solid #787878;
+        cursor: pointer;
+        font-size: 1.2em;
+        font-weight: 600;
+        padding: 7px;
+        margin-right: 8px;
+        width: auto;
+    }
+
+    td input[type="submit"],
+    td input[type="button"],
+    td button {
+        font-size: 1em;
+        padding: 4px;
+        margin-right: 4px;
+    }
+
+/* login
+----------------------------------------------------------*/
+#login {
+    display: block;
+    font-size: .85em;
+    margin: 0 0 10px;
+    text-align: right;
+}
+
+    #login a {
+        background-color: #d3dce0;
+        margin-left: 10px;
+        margin-right: 3px;
+        padding: 2px 3px;
+        text-decoration: none;
+    }
+
+    #login a.username {
+        background: none;
+        margin: 0;
+        padding: 0;
+        text-decoration: underline;
+    }
+
+    #login ul {
+        margin: 0;
+    }
+
+    #login li {
+        display: inline;
+        list-style: none;
+    }
+
+.blockicon {
+    background:url('/images/vote/icon_sprite.png') no-repeat -465px -32px;
+    width:12px;
+    height:12px;
+    margin:3px 5px 3px 0;
+}
+
+.praiseicon-click {
+    background:url('/images/vote/icon_sprite.png') no-repeat -488px -24px;
+    width:27px;
+    height:23px;
+}
+
+.praiseicon-noneclick {
+    background:url('/images/vote/icon_sprite.png') no-repeat -525px -24px;
+    width:27px;
+    height:23px;
+}
+
+.btn-vote-default {
+    background:url('/images/vote/icon_sprite.png') no-repeat -950px -27px;
+    width:55px;
+    height:25px;
+    margin: 0;
+    padding:0;
+    border-color:#BBBBBB;
+}
+
+.btn-vote-click {
+    background:url('/images/vote/icon_sprite.png') no-repeat -1016px -27px;
+    width:55px;
+    height:25px;
+    margin: 0;
+    padding:0;
+    border-color:#BBBBBB;
+}
+
+.btn-vote-nonclick {
+    background:url('/images/vote/icon_sprite.png') no-repeat -1082px -27px;
+    width:55px;
+    height:25px;
+    margin: 0;
+    padding:0;
+    border-color:#BBBBBB;
+}
+
+.btn-vote-pkmode-red {
+    width:125px;
+    height:30px;
+    background-color:#FF4D4D;
+    border-color:#FF4D4D;
+    color:#FFFFFF;
+    font-size:13px;
+}
+
+.btn-vote-pkmode-red:hover {
+    width:125px;
+    height:30px;
+    background-color:#FF7373;
+    border-color:#FF7373;
+    color:#FFFFFF;
+    font-size:13px;
+}
+
+.btn-vote-pkmode-blue{
+    width:125px;
+    height:30px;
+    background-color:#0072C5;
+    border-color:#0072C5;
+    color:#FFFFFF;
+    font-size:13px;
+}
+
+.btn-vote-pkmode-blue:hover{
+    width:125px;
+    height:30px;
+    background-color:#159CFF;
+    border-color:#159CFF;
+    color:#FFFFFF;
+    font-size:13px;
+}
+
+.btn-vote-pkmode-disable{
+    width:125px;
+    height:30px;
+    background-color:#BBBBBB;
+    border-color:#BBBBBB;
+    color:#FFFFFF;
+    font-size:13px;
+}

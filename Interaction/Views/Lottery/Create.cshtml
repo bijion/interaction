@@ -1,0 +1,395 @@
+﻿﻿
+@{
+    if (ViewBag.update == false)
+    {
+        ViewBag.Title = "添加奖品";
+    }
+    else
+    {
+        ViewBag.Title = "更新奖品";
+    }
+    List<string> queryArray = new List<string>();
+    int length = queryArray.Count;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <form class="form-horizontal" role="form" action="CreateFinish" method="post">
+        <!--Main info-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                基本信息
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <input type="hidden" id="updateOrCreate" name="updateOrCreate" value="@ViewBag.update.ToString()" />
+                    @{
+                        if (ViewBag.update == true)
+                        {
+                            <input type="hidden" id="Key" name="Key" value="@ViewBag.award.RowKey" />
+                        }
+                    }
+                    <label for="topic" class="col-sm-2 control-label">奖品名称</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="name" name="name"
+                                       placeholder="请输入奖品名称">
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" id="name" name="name" readonly="readonly" value="@ViewBag.award.AwardName">
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="topic" class="col-sm-2 control-label">奖品链接</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="url" name="url"
+                                       placeholder="请输入奖品链接">
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" id="url" name="url" value="@ViewBag.award.Url">
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="author" class="col-sm-2 control-label">中奖率</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="rate" name="rate"
+                                       placeholder="请输入奖品中奖概率">
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" id="rate" name="rate" value="@ViewBag.award.AwardRate">
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="author" class="col-sm-2 control-label">每日上限</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="quota" name="quota"
+                                       placeholder="请输入奖品每日上限">
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" id="quota" name="quota" value="@ViewBag.award.AwardQuota">
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="startdate" class="col-sm-2 control-label">生效时间</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="date" class="form-control" id="startdate" name="startdate"
+                                       placeholder="请输入奖品生效时间">
+                            }
+                            else
+                            {
+                                DateTime sdt = @ViewBag.award.StartDate;
+                                <input type="date" class="form-control" id="startdate" name="startdate" value="@sdt.ToString("yyyy-MM-dd")">
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="enddate" class="col-sm-2 control-label">失效时间</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="date" class="form-control" id="enddate" name="enddate"
+                                       placeholder="请输入奖品失效时间">
+                            }
+                            else
+                            {
+                                DateTime edt = @ViewBag.award.EndDate;
+                                <input type="date" class="form-control" id="enddate" name="enddate" value="@edt.ToString("yyyy-MM-dd")">
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Trigger queries-->
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                触发查询
+            </div>
+            @{
+                if (ViewBag.update == true)
+                {
+                    string queries = @ViewBag.award.TriggerQueries;
+                    @queryArray = queries.Split('$').ToList();
+                    @length = @queryArray.Count;
+                }
+            }
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="query1" class="col-sm-2 control-label">触发查询#1</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query1" name="query1"
+                                       placeholder="请输入第一个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 1)
+                                {
+                                    <input type="text" class="form-control" id="query1" name="query1" value="@queryArray[0]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query1" name="query1"
+                                           placeholder="请输入第一个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="query2" class="col-sm-2 control-label">触发查询#2</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query2" name="query2"
+                                       placeholder="请输入第二个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 2)
+                                {
+                                    <input type="text" class="form-control" id="query2" name="query2" value="@queryArray[1]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query2" name="query2"
+                                           placeholder="请输入第二个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="query3" class="col-sm-2 control-label">触发查询#3</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query3" name="query3"
+                                       placeholder="请输入第三个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 3)
+                                {
+                                    <input type="text" class="form-control" id="query3" name="query3" value="@queryArray[2]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query3" name="query3"
+                                           placeholder="请输入第三个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="query4" class="col-sm-2 control-label">触发查询#4</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query4" name="query4"
+                                       placeholder="请输入第四个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 4)
+                                {
+                                    <input type="text" class="form-control" id="query4" name="query4" value="@queryArray[3]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query4" name="query4"
+                                           placeholder="请输入第四个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="query5" class="col-sm-2 control-label">触发查询#5</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query5" name="query5"
+                                       placeholder="请输入第五个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 5)
+                                {
+                                    <input type="text" class="form-control" id="query5" name="query5" value="@queryArray[4]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query5" name="query5"
+                                           placeholder="请输入第五个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="query6" class="col-sm-2 control-label">触发查询#6</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query6" name="query6"
+                                       placeholder="请输入第六个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 6)
+                                {
+                                    <input type="text" class="form-control" id="query6" name="query6" value="@queryArray[5]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query6" name="query6"
+                                           placeholder="请输入第六个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="query7" class="col-sm-2 control-label">触发查询#7</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query7" name="query7"
+                                       placeholder="请输入第七个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 7)
+                                {
+                                    <input type="text" class="form-control" id="query7" name="query7" value="@queryArray[6]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query7" name="query7"
+                                           placeholder="请输入第七个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="query8" class="col-sm-2 control-label">触发查询#8</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query8" name="query8"
+                                       placeholder="请输入第八个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 8)
+                                {
+                                    <input type="text" class="form-control" id="query8" name="query8" value="@queryArray[7]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query8" name="query8"
+                                           placeholder="请输入第八个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="query9" class="col-sm-2 control-label">触发查询#9</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query9" name="query9"
+                                       placeholder="请输入第九个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 9)
+                                {
+                                    <input type="text" class="form-control" id="query9" name="query9" value="@queryArray[8]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query9" name="query9"
+                                           placeholder="请输入第九个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="query10" class="col-sm-2 control-label">触发查询#10</label>
+                    <div class="col-sm-10">
+                        @{
+                            if (ViewBag.update == false)
+                            {
+                                <input type="text" class="form-control" id="query10" name="query10"
+                                       placeholder="请输入第十个触发查询词">
+                            }
+                            else
+                            {
+                                if (@length >= 10)
+                                {
+                                    <input type="text" class="form-control" id="query10" name="query10" value="@queryArray[9]">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" id="query10" name="query10"
+                                           placeholder="请输入第十个触发查询词">
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Action-->
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </form>
+</div>

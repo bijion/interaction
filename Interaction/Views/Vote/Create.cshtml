@@ -1,0 +1,132 @@
+﻿<div style="padding-top:20px;">
+    <form id="createtopic" class="form-horizontal" role="form" action="CreateFinish" method="post" enctype="multipart/form-data">
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="overflow:auto;">
+                <div style="float:left;"><label>投票基本信息<span style="padding-left:10px;font-size:12px;color:black;"><a href="http://interaction.chinacloudsites.cn/Vote/Detail?tid=T20141028051724239R851451" style="color:white;text-decoration:underline;" target="_blank">样例</a></span></label></div>
+                <div style="float:right;">
+                    <select name="market">
+                        @if (@ViewBag.Market == "zh-cn" || @ViewBag.Market == "")
+                        {
+                            <option value="zh-cn" selected>zh-cn</option>
+                            <option value="jp-jp">ja-jp</option>
+                        }
+                        else if (@ViewBag.Market == "ja-jp")
+                        {
+                            <option value="zh-cn">zh-cn</option>
+                            <option value="jp-jp" selected>ja-jp</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="panel-body" style="padding:20px 50px;">
+                <div class="form-group">
+                    <label for="topic" class="col-sm-2 control-label" style="text-align:center;">投票标题</label>
+                    <div class="col-sm-10">
+                        <input type="hidden" id="topicid" name="topicid" value="@ViewBag.TopicId">
+                        <input type="text" class="form-control" id="topictitle" name="topictitle" placeholder="请输入投票标题(5-20个字符) - [必填项]" style="max-width:100%;" value="@ViewBag.TopicTitle">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="col-sm-2" style="text-align:center;"> 投票选项</label>
+                        <div class="col-sm-10" style="font-size:12px;padding-top:5px;">
+                            请填写<span style="color:red;">至少2个</span>投票选项
+                            @if (ViewBag.IsUpdate) 
+                            { 
+                                <span>, 目前只支持修改和新增，不能删除</span>
+                            }
+                        </div>
+                    </div>
+                    <div id="optionlist">
+                        @for (int i = 1; i <= 10; i++)
+                        {
+                            var optid = "optiontext" + i;
+                            var ph = "请输入第 " + i + " 个投票选项(2-15个字符)" + (i <= 2 ? " - [必填项]" : "");
+                            <div class="form-group">
+                                <div class="col-sm-2" style="text-align:center;font-size:1.2em;padding-top:12px;padding-bottom:12px;"></div>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="@optid" name="@optid"
+                                           placeholder="@ph" style="max-width:100%;" value="@ViewBag.OptionText[i]">
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <input type="hidden" id="topichasdetailpage" name="topichasdetailpage" value="1">
+                <div class="form-group">
+                    <label for="background" class="col-sm-2 control-label" style="text-align:center;">背景介绍</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" rows="3" placeholder="请输入相关背景介绍(20-500个字符) - [必填项]" id="topicbackground" name="topicbackground" style="max-width:100%;">@ViewBag.Background</textarea>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="col-sm-2" style="text-align:center;">相关新闻</label>
+                        <div class="col-sm-10" style="font-size:12px;padding-top:5px;">请填写<span style="color:red;">至少2条</span>相关新闻</div>
+                    </div>
+                    <div id="relatednewslist">
+                        @for (int i = 1; i <= 4; i++)
+                        {
+                            var rntitleid = "relatednewstitle" + i;
+                            var rnurlid = "relatednewsurl" + i;
+                            var phtitle = "请输入第 " + i + " 条新闻的标题(5-30个字符)" + (i <= 2 ? " - [必填项]" : "");
+                            var phurl = "请输入第 " + i + " 条新闻的链接地址" + (i <= 2 ? " - [必填项]" : "");
+                            <div class="form-group">
+                                <div class="col-sm-2" style="text-align:center;font-size:1.2em;padding-top:12px;padding-bottom:12px;"></div>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="@rntitleid" name="@rntitleid" placeholder="@phtitle" style="max-width:100%;" value="@ViewBag.RelatedNewsTitle[i]">
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="@rnurlid" name="@rnurlid" placeholder="@phurl" style="max-width:100%;" value="@ViewBag.RelatedNewsUrl[i]">
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label for="topicbackgroundpic" class="col-sm-2 control-label" style="text-align:center;">背景图片</label>
+                        <div class="col-sm-10">
+                            <input type="file" id="topicbackgroundpic" name="topicbackgroundpic" style="float:left;"/>
+                            <p class="help-block" style="float:left;padding-top:10px;padding-left:10px;">[必填项] - 推荐图片格式 : 640px * 320px , jpg</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">触发查询词<span style="font-size:12px;padding-left:20px;">说明：如果您的投票通过审核，Bing会根据所填写的查询词将该其显示在搜索结果页，目前最多支持20个查询词</span></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    @for (int i = 1; i <= 20; i++)
+                    {
+                        var id = "query" + i;
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="@id" name="@id"
+                                   placeholder="请输入第 @i 个触发查询词" value="@ViewBag.TriggeringQuery[i]">
+                        </div>
+                    }                
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">用户信息</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="author" class="col-sm-2 control-label" style="text-align:center;">邮箱地址</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="author" name="author"
+                               placeholder="请输入您的常用电子邮箱 - [必填项]" value="@ViewBag.Creator">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Action-->
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-primary" onclick="createtopic();">提交</button>
+            </div>
+        </div>
+    </form>
+</div>

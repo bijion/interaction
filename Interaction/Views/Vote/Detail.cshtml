@@ -1,0 +1,71 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutVoteDetailPage.cshtml";
+}
+<div id="wechatpublicaccount" style="position:fixed;width:170px;height:160px;border:1px solid #BBBBBB;padding:5px;background-color:white;z-index:1;display:none;">
+    <div style="text-align:center;"><span>微信扫一扫，全民嗨起来</span></div>
+    <div style="text-align:center;"><img src="~/images/vote/qrcode_for_gh_a83bf367295b_258.jpg" style="width:129px;height:129px;"></div>
+</div>
+<div style="width:100%;float:left;">   
+    <!-- Carousel -->
+    <div>
+        <img src="@ViewBag.VoteTopic.PictureLink" style="width:100%;" class="img-responsive" alt="@ViewBag.VoteTopic.TopicEntity.TopicTitle">
+    </div>
+    <div style="padding:10px;">
+        <!-- vote -->
+        <div style="width:100%;float:left;">
+            @Html.Partial("_ShowVoteEntity")
+        </div>
+        <div style="height:1px; background:#E5E5E5;width:100%;float:left;"></div>
+        <!-- background -->
+        <div style="margin:20px 0;font-size:14px;color:#333333;font-family:Arial, Helvetica, sans-serif;width:100%;float:left;">
+            <div style="height:23px;margin-bottom:3px;">
+                <div class="pull-left blockicon"></div>
+                <div>@ViewBag.LabelLang["LabelBackground"]</div>
+            </div>
+            <div style="line-height:20px;margin-bottom:3px;word-break:break-all;">
+                @ViewBag.VoteTopic.Background<a href="@ViewBag.BingShareUrl" target="_blank" style="color:#0000CC;padding-left:15px;">@ViewBag.LabelLang["LabelMore"]</a>
+            </div>       
+        </div>
+        <div style="height:1px; background:#E5E5E5;width:100%;float:left;"></div>
+        <!-- related news -->
+        <div style="margin:20px 0 0;font-size:14px;font-family:Arial, Helvetica, sans-serif;width:100%;float:left;">
+            <div style="height:23px;margin-bottom:3px;">
+                <div class="pull-left blockicon"></div>
+                <span style="color:#333333">@ViewBag.LabelLang["LabelRelatednews"]</span>
+            </div>
+            <ul class="list-unstyled">
+            @{
+                if (null != ViewBag.VoteTopic.RelatedNewsList)
+                {
+                    foreach (var news in ViewBag.VoteTopic.RelatedNewsList)
+                    {
+                        <li style="margin:5px auto;">
+                            <a href="@news.Url" target="_blank" style="color: #0000CC;">@news.Title</a>
+                        </li>
+                    }
+                }
+            }
+            </ul>       
+        </div>    
+
+        <!-- Comments -->
+        <div style="height:1px; background:#E5E5E5;width:100%;float:left;margin:0 0 10px;"></div>
+    
+        <!-- 多说评论框 start -->
+        <div class="ds-thread" data-thread-key="@ViewBag.VoteTopic.TopicId" data-title="@ViewBag.VoteTopic.TopicEntity.TopicTitle" data-url="@ViewBag.ShareUrl" data-image="@ViewBag.ShareImage" data-order="desc" data-limit="20" data-form-position="top"></div>
+        <!-- 多说评论框 end -->
+        <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+        <script type="text/javascript">
+            var duoshuoQuery = { short_name: "juw" };
+            (function () {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript'; ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0]
+                 || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+        </script>
+        <!-- 多说公共JS代码 end -->
+    </div>
+</div>

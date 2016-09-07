@@ -1,0 +1,20 @@
+﻿@{
+    if (@ViewBag.updateOrCreate == false)
+    {
+        ViewBag.Title = "奖品添加成功";
+    }
+    else
+    {
+        ViewBag.Title = "奖品更新成功";
+    }
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+<div>
+    <p>
+        <a class="btn btn-primary" href="/Lottery/Create">继续添加 &raquo;</a>
+        <a class="btn btn-primary" href="/Lottery/AwardsList">列表 &raquo;</a>
+    </p>
+</div>

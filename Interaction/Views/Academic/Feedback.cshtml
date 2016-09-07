@@ -1,0 +1,74 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAcademicFeedback.cshtml";
+}
+
+@model Interaction.Models.AcademicModel
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/Feedback.js")"></script>
+<link rel="stylesheet" href="~/Content/Feedback.css" />
+
+@{ if (!string.IsNullOrEmpty(Model.StyleFileName))
+    {
+        <link rel="stylesheet" href="~/Content/@Model.StyleFileName" />
+    }
+}
+
+<form id="academicfeedbackform" role="form" action="AddFeedback" method="post" enctype="multipart/form-data">
+    <div id="academicfeedback">
+        <div class="title">@Model.Title</div>
+        <textarea id="cmttext" name="cmttext" class="cmtarea" maxlength="1024" placeholder="@Model.CommentPlaceHolder"></textarea>
+        <div class="upload">
+            <a href="javascript:;">
+                <input type="file" id="uploadImage" name="uploadImage" multiple="multiple" onchange="javascript:AddNewImage(this.files);" accept="image/*" />
+                <span>上传截图</span>
+            </a>
+            <input type="hidden" id="hiddenImageName" name="hiddenImageName" />
+            <span class="selectImageButtonDescription">（小于3M）</span>
+        </div>
+        <div id="clippicpreview">
+            <div>
+                <div class="previewimg" id="clippicpreview1">
+                    <img src="~/images/academic/uploadbkg.jpg" style="width:62px;height:54px;">
+                </div>
+                <input type="hidden" />
+                <div class="deletePreviewImage" onclick="javascript:deleteimg('clippicpreview1');" accept="image/*"></div>
+            </div>
+            <div>
+                <div class="previewimg" id="clippicpreview2">
+                    <img src="~/images/academic/uploadbkg.jpg" style="width:62px;height:54px;">
+                </div>
+                <input type="hidden" />
+                <div class="deletePreviewImage" onclick="javascript:deleteimg('clippicpreview2');" accept="image/*"></div>
+            </div>
+            <div>
+                <div class="previewimg" id="clippicpreview3">
+                    <img src="~/images/academic/uploadbkg.jpg" style="width:62px;height:54px;">
+                </div>
+                <input type="hidden" />
+                <div class="deletePreviewImage" onclick="javascript:deleteimg('clippicpreview3');" accept="image/*"></div>
+            </div>
+        </div>
+        <div class="contacttitle">联系方式</div>
+        <div>
+            <input type="text" id="email" name="email" placeholder="@Model.ContactPlaceHolder" maxlength="64">
+        </div>
+        <div class="btnarea">
+            <button type="button" onclick="AddFeedback();" class="cmtbtn">提交反馈</button>
+        </div>
+        <div class="modal fade" style="overflow-y:visible;" id="alertmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border-radius:0;">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="msid" name="msid" value="@ViewBag.MsId" />
+        <input type="hidden" id="url" name="url" value="@ViewBag.Url" />
+        <input type="hidden" name="iframeId" value="@ViewBag.IframeId" />
+        <input type="hidden" id="contact" name="contact" value="" />
+        <input type="hidden" name="event" value="@Model.Event" />
+    </div>
+</form>
